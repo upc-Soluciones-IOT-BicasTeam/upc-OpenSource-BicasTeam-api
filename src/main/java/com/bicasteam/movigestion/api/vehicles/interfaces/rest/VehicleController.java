@@ -68,17 +68,19 @@ public class VehicleController {
         }
 
         Vehicle updatedVehicle = existingVehicle.get();
+        updatedVehicle.setIdManager(resource.idManager());
         updatedVehicle.setLicensePlate(resource.licensePlate());
+        updatedVehicle.setBrand(resource.brand());
         updatedVehicle.setModel(resource.model());
-        updatedVehicle.setEngine(resource.engine());
-        updatedVehicle.setFuel(resource.fuel());
-        updatedVehicle.setTires(resource.tires());
-        updatedVehicle.setElectricalSystem(resource.electricalSystem());
-        updatedVehicle.setTransmissionTemperature(resource.transmissionTemperature());
-        updatedVehicle.setDriverName(resource.driverName());
+        updatedVehicle.setTemperature(resource.temperature());
+        updatedVehicle.setHumidity(resource.humidity());
+        updatedVehicle.setMaxLoad(resource.maxLoad());
+        updatedVehicle.setDriverId(resource.driverId());
         updatedVehicle.setVehicleImage(resource.vehicleImage());
         updatedVehicle.setColor(resource.color());
         updatedVehicle.setLastTechnicalInspectionDate(resource.lastTechnicalInspectionDate());
+        updatedVehicle.setLatitude(resource.latitude());
+        updatedVehicle.setLongitude(resource.longitude());
 
         vehicleCommandService.save(updatedVehicle);
 
