@@ -18,6 +18,11 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
     }
 
     @Override
+    public Optional<Profile> findByCredentialId(Long idCredential) {
+        return profileRepository.findByUserId(idCredential);
+    }
+
+    @Override
     public Optional<Profile> findById(Long id) {
         return profileRepository.findById(id);
     }
@@ -26,15 +31,4 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
     public List<Profile> findAll() {
         return profileRepository.findAll();
     }
-
-    @Override
-    public Optional<Profile> findByEmail(String email) {
-        return profileRepository.findByEmail(email);
-    }
-
-    @Override
-    public Optional<Profile> findByEmailAndPassword(String email, String password) {
-        return profileRepository.findByEmailAndPassword(email, password);
-    }
 }
-

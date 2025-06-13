@@ -1,5 +1,7 @@
 package com.bicasteam.movigestion.api.profiles.application.internal;
 
+import com.bicasteam.movigestion.api.iam.domain.model.aggregates.User;
+import com.bicasteam.movigestion.api.iam.domain.repositories.UserRepository;
 import com.bicasteam.movigestion.api.profiles.domain.model.aggregates.Profile;
 import com.bicasteam.movigestion.api.profiles.domain.model.commands.CreateProfileCommand;
 import com.bicasteam.movigestion.api.profiles.domain.repositories.ProfileRepository;
@@ -13,33 +15,43 @@ import java.util.Optional;
 public class ProfileCommandServiceImpl implements ProfileCommandService {
 
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
-    public ProfileCommandServiceImpl(ProfileRepository profileRepository) {
+    public ProfileCommandServiceImpl(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public Optional<Profile> handle(CreateProfileCommand command) {
-        Profile profile = new Profile(command);
-        try {
-            profileRepository.save(profile);
-        } catch (Exception e) {
+        Optional<User> user = userRepository.findById(command.idCredential());
+        if (user.isEmpty() || profileRepository.existsByUserId(command.idCredential())) {
             return Optional.empty();
         }
+
+        Profile profile = new Profile(command, user.get());
+        profileRepository.save(profile);
         return Optional.of(profile);
     }
-    // Implementación del nuevo método `save`
 
     @Override
     @Transactional
-    public boolean deleteProfileById(Long id) {
+    public boolean update(Long id, CreateProfileCommand command) {
+        return profileRepository.findById(id).map(profile -> {
+            profile.update(command.name(), command.lastName(), command.telephone());
+            profileRepository.save(profile);
+            return true;
+        }).orElse(false);
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Long id) {
         if (profileRepository.existsById(id)) {
             profileRepository.deleteById(id);
             return true;
         }
         return false;
     }
-
 }
-
