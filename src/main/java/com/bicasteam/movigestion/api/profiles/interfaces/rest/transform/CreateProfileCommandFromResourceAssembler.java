@@ -6,7 +6,11 @@ import com.bicasteam.movigestion.api.profiles.interfaces.rest.resources.CreatePr
 public class CreateProfileCommandFromResourceAssembler {
     public static CreateProfileCommand toCommandFromResource(CreateProfileResource resource) {
         return new CreateProfileCommand(
-                resource.idCredential(), resource.name(), resource.lastName(), resource.telephone()
+                resource.idCredential(),
+                resource.name(),
+                resource.lastName(),
+                resource.telephone(),
+                resource.idCompany()
         );
     }
 }

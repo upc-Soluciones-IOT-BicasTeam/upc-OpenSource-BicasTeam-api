@@ -26,11 +26,16 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
     @Transactional
     public Optional<Profile> handle(CreateProfileCommand command) {
         Optional<User> user = userRepository.findById(command.idCredential());
-        if (user.isEmpty() || profileRepository.existsByUserId(command.idCredential())) {
-            return Optional.empty();
+        if (user.isEmpty()) return Optional.empty();
+
+        Profile company = null;
+        if (command.idCompany() != null) {
+            Optional<Profile> maybeCompany = profileRepository.findById(command.idCompany());
+            if (maybeCompany.isEmpty()) return Optional.empty(); // idCompany no válido
+            company = maybeCompany.get();
         }
 
-        Profile profile = new Profile(command, user.get());
+        Profile profile = new Profile(command, user.get(), company);
         profileRepository.save(profile);
         return Optional.of(profile);
     }
