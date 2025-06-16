@@ -1,7 +1,5 @@
 package com.bicasteam.movigestion.api.subscriptions.application.internal;
 
-import com.bicasteam.movigestion.api.iam.domain.model.aggregates.User;
-import com.bicasteam.movigestion.api.iam.domain.repositories.UserRepository;
 import com.bicasteam.movigestion.api.subscriptions.domain.model.aggregates.Subscription;
 import com.bicasteam.movigestion.api.subscriptions.domain.model.commands.CreateSubscriptionCommand;
 import com.bicasteam.movigestion.api.subscriptions.domain.repositories.SubscriptionRepository;
@@ -15,22 +13,21 @@ import java.util.Optional;
 public class SubscriptionCommandServiceImpl implements SubscriptionCommandService {
 
     private final SubscriptionRepository subscriptionRepository;
-    private final UserRepository userRepository;
 
-    public SubscriptionCommandServiceImpl(SubscriptionRepository subscriptionRepository, UserRepository userRepository) {
+    public SubscriptionCommandServiceImpl(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public Optional<Subscription> handle(CreateSubscriptionCommand command) {
-        Optional<User> user = userRepository.findById(command.userId());
-        if (user.isEmpty()) return Optional.empty();
-
-        Subscription subscription = new Subscription(command, user.get());
-        subscriptionRepository.save(subscription);
-        return Optional.of(subscription);
+        Subscription subscription = new Subscription(command);
+        try {
+            subscriptionRepository.save(subscription);
+            return Optional.of(subscription);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override

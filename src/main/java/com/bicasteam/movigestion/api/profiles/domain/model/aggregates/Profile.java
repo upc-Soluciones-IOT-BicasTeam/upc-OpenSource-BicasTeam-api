@@ -15,29 +15,24 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "id_credential", nullable = false, unique = true)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "id_company")
-    private Profile company; // representa al gerente (otro perfil)
-
+    private Long idCredential; // FK lógica a User
     private String name;
     private String lastName;
     private String telephone;
+    private Long idCompany; // FK lógica a otro Profile
 
-    public Profile(CreateProfileCommand command, User user, Profile company) {
+    public Profile(CreateProfileCommand command) {
+        this.idCredential = command.idCredential();
         this.name = command.name();
         this.lastName = command.lastName();
         this.telephone = command.telephone();
-        this.user = user;
-        this.company = company; // puede ser null si es gerente
+        this.idCompany = command.idCompany();
     }
 
-    public void update(String name, String lastName, String telephone) {
+    public void update(String name, String lastName, String telephone, Long idCompany) {
         this.name = name;
         this.lastName = lastName;
         this.telephone = telephone;
+        this.idCompany = idCompany;
     }
 }

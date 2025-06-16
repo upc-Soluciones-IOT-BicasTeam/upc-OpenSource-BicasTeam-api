@@ -1,6 +1,5 @@
 package com.bicasteam.movigestion.api.subscriptions.domain.model.aggregates;
 
-import com.bicasteam.movigestion.api.iam.domain.model.aggregates.User;
 import com.bicasteam.movigestion.api.subscriptions.domain.model.commands.CreateSubscriptionCommand;
 import com.bicasteam.movigestion.api.subscriptions.domain.model.enums.SubscriptionState;
 import jakarta.persistence.*;
@@ -20,19 +19,15 @@ public class Subscription {
 
     private String url;
     private LocalDate paymentDate;
-
-    @Enumerated(EnumType.STRING)
     private SubscriptionState state;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_user")
-    private User user;
+    private Long userId; // FK lógica sin relación JPA
 
-    public Subscription(CreateSubscriptionCommand command, User user) {
+    public Subscription(CreateSubscriptionCommand command) {
         this.url = command.url();
         this.paymentDate = command.paymentDate();
         this.state = command.state();
-        this.user = user;
+        this.userId = command.userId();
     }
 
     public void update(String url, LocalDate paymentDate, SubscriptionState state) {

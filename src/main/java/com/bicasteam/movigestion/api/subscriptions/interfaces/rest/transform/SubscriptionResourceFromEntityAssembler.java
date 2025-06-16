@@ -10,7 +10,7 @@ public class SubscriptionResourceFromEntityAssembler {
                 subscription.getUrl(),
                 subscription.getPaymentDate(),
                 subscription.getState(),
-                subscription.getUser().getId()
+                subscription.getUserId()
         );
     }
 }

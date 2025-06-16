@@ -19,7 +19,7 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
 
     @Override
     public Optional<Profile> findByCredentialId(Long idCredential) {
-        return profileRepository.findByUserId(idCredential);
+        return profileRepository.findByIdCredential(idCredential);
     }
 
     @Override
