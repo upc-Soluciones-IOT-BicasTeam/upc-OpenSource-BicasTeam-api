@@ -1,5 +1,7 @@
 package com.bicasteam.movigestion.api.vehicles.interfaces.rest.resources;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public record VehicleResource(
@@ -14,8 +16,10 @@ public record VehicleResource(
         int driverId,
         String vehicleImage,
         String color,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime lastTechnicalInspectionDate,
-        Double latitude,
-        Double longitude,
+        String location,
+        String speed,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt
 ) {}

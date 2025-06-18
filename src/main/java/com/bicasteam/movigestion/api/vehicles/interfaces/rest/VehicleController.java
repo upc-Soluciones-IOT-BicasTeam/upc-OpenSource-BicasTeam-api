@@ -81,6 +81,8 @@ public class VehicleController {
         updatedVehicle.setLastTechnicalInspectionDate(resource.lastTechnicalInspectionDate());
         updatedVehicle.setLatitude(resource.latitude());
         updatedVehicle.setLongitude(resource.longitude());
+        updatedVehicle.setAltitude(resource.altitude());
+        updatedVehicle.setSpeed(resource.speed());
 
         vehicleCommandService.save(updatedVehicle);
 

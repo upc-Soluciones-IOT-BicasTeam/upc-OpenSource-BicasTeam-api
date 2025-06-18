@@ -18,7 +18,9 @@ public class CreateVehicleCommandFromResourceAssembler {
                 resource.color(),
                 resource.lastTechnicalInspectionDate(),
                 resource.latitude(),
-                resource.longitude()
+                resource.longitude(),
+                resource.altitude(),
+                resource.speed()
         );
     }
 }

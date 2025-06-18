@@ -15,5 +15,7 @@ public record CreateVehicleCommand(
         String color,
         LocalDateTime lastTechnicalInspectionDate,
         Double latitude,
-        Double longitude
+        Double longitude,
+        Double altitude,
+        Double speed
 ) {}

@@ -1,6 +1,7 @@
 package com.bicasteam.movigestion.api.vehicles.domain.model.aggregates;
 
 import com.bicasteam.movigestion.api.vehicles.domain.model.commands.CreateVehicleCommand;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,11 +35,19 @@ public class Vehicle {
     private int driverId;
     private String vehicleImage;
     private String color;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastTechnicalInspectionDate;
+
     private Double latitude;
     private Double longitude;
+    private Double altitude;
+    private Double speed;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+
+    private LocalDateTime GPSDateTime;
 
     public Vehicle(CreateVehicleCommand command) {
         this.idManager = command.idManager();
@@ -54,7 +63,10 @@ public class Vehicle {
         this.lastTechnicalInspectionDate = command.lastTechnicalInspectionDate();
         this.latitude = command.latitude();
         this.longitude = command.longitude();
+        this.altitude = command.altitude();
+        this.speed = command.speed();
         this.createdAt = LocalDateTime.now();
+        this.GPSDateTime = LocalDateTime.now();
     }
 
     // Setters
@@ -98,7 +110,25 @@ public class Vehicle {
         this.lastTechnicalInspectionDate = lastTechnicalInspectionDate;
     }
 
-    public void setLatitude(Double latitude) {this.latitude = latitude;}
+    public void setLatitude(Double latitude) {
+        if (this.latitude == null || !this.latitude.equals(latitude)) {
+            this.latitude = latitude;
+            this.GPSDateTime = LocalDateTime.now();
+        }
+    }
 
-    public void setLongitude(Double longitude) {this.latitude = longitude;}
+    public void setLongitude(Double longitude) {
+        if (this.longitude == null || !this.longitude.equals(longitude)) {
+            this.longitude = longitude;
+            this.GPSDateTime = LocalDateTime.now();
+        }
+    }
+
+    public void setAltitude(Double altitude) {
+        if (this.altitude == null || !this.altitude.equals(altitude)) {
+            this.altitude = altitude;
+            this.GPSDateTime = LocalDateTime.now(); // Update timestamp if altitude changes
+        }
+    }
+    public void setSpeed(Double speed) {this.speed = speed;}
 }
