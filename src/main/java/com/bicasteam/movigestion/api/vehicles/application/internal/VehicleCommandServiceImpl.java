@@ -22,12 +22,7 @@ public class VehicleCommandServiceImpl implements VehicleCommandService {
     @Transactional
     public Optional<Vehicle> handle(CreateVehicleCommand command) {
         Vehicle vehicle = new Vehicle(command);
-        try {
-            vehicleRepository.save(vehicle);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-        return Optional.of(vehicle);
+        return Optional.of(vehicleRepository.save(vehicle));
     }
 
     @Override

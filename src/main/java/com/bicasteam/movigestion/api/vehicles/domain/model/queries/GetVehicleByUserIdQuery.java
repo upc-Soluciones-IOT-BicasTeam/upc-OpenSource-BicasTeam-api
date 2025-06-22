@@ -1,4 +1,4 @@
 package com.bicasteam.movigestion.api.vehicles.domain.model.queries;
 
-public record GetVehicleByUserIdQuery (int userId) {
+public record GetVehicleByUserIdQuery (int idManager) {
 }
