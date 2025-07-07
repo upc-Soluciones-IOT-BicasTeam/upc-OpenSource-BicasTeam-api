@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResource> createUser(@RequestBody CreateUserResource resource) {
         CreateUserCommand command = CreateUserCommandFromResourceAssembler.toCommandFromResource(resource);
-        Optional<User> result = commandService.handle(command);
+        Optional<User> result = commandService.createUser(command);
         return result.map(user -> new ResponseEntity<>(
                         UserResourceFromEntityAssembler.toResourceFromEntity(user), HttpStatus.CREATED))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));

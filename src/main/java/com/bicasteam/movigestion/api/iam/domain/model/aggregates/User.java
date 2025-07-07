@@ -25,7 +25,11 @@ public class User {
         this.password = command.password();
         this.role = command.role();
     }
-
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
     public void setEmail(String email) { this.email = email; }
 
     public void setPassword(String password) { this.password = password; }
