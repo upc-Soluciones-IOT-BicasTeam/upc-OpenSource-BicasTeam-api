@@ -1,6 +1,7 @@
 package com.bicasteam.movigestion.api.vehicles.interfaces.rest.transform;
 
 import com.bicasteam.movigestion.api.vehicles.domain.model.aggregates.Vehicle;
+import com.bicasteam.movigestion.api.vehicles.domain.model.valueObjects.VehicleLocation;
 import com.bicasteam.movigestion.api.vehicles.interfaces.rest.resources.VehicleResource;
 
 import java.time.format.DateTimeFormatter;
@@ -8,21 +9,21 @@ import java.time.format.DateTimeFormatter;
 public class VehicleResourceFromEntityAssembler {
     public static VehicleResource toResourceFromEntity(Vehicle entity) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String gpsDateFormatted = entity.getGPSDateTime() != null ?
-                entity.getGPSDateTime().format(formatter) : null;
+
+        VehicleLocation loc = entity.getLocation();
+        String gpsDateFormatted = (loc != null && loc.getGpsDateTime() != null)
+                ? loc.getGpsDateTime().format(formatter)
+                : null;
 
         String locationString = String.format("Latitude: %s, Longitude: %s, Altitude: %s, GPS Date&Time: %s",
-                entity.getLatitude(),
-                entity.getLongitude(),
-                entity.getAltitude() != null ? entity.getAltitude() : 0.0,
+                loc != null ? loc.getLatitude() : "N/A",
+                loc != null ? loc.getLongitude() : "N/A",
+                loc != null && loc.getAltitude() != null ? loc.getAltitude() : 0.0,
                 gpsDateFormatted);
 
-        String speedFormatted;
-        if (entity.getSpeed() != null) {
-            speedFormatted = String.format("%.1f km/h", entity.getSpeed());
-        } else {
-            speedFormatted = "N/A km/h";
-        }
+        String speedFormatted = (loc != null && loc.getSpeed() != null)
+                ? String.format("%.1f km/h", loc.getSpeed())
+                : "N/A km/h";
 
         return new VehicleResource(
                 entity.getId(),
