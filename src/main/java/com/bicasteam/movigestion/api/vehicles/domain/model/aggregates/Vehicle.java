@@ -1,7 +1,6 @@
 package com.bicasteam.movigestion.api.vehicles.domain.model.aggregates;
 
 import com.bicasteam.movigestion.api.vehicles.domain.model.commands.CreateVehicleCommand;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,84 +17,73 @@ public class Vehicle {
     private int id;
 
     @Column(nullable = false)
-    private int idManager;
+    private int idUser;
 
     @Column(nullable = false)
     private String licensePlate;
 
     @Column(nullable = false)
-    private String brand;
-
-    @Column(nullable = false)
     private String model;
 
-    private int temperature;
-    private int humidity;
-    private int maxLoad;
-    private int driverId;
+    private int engine;
+    private int fuel;
+    private int tires;
+    private int electricalSystem;
+    private int transmissionTemperature;
+    private String driverName;
     private String vehicleImage;
     private String color;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastTechnicalInspectionDate;
 
-    private Double latitude;
-    private Double longitude;
-    private Double altitude;
-    private Double speed;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    private LocalDateTime GPSDateTime;
-
     public Vehicle(CreateVehicleCommand command) {
-        this.idManager = command.idManager();
+        this.idUser = 1; // Asigna un valor por defecto o lógica específica si es necesario
         this.licensePlate = command.licensePlate();
-        this.brand = command.brand();
         this.model = command.model();
-        this.temperature = command.temperature();
-        this.humidity = command.humidity();
-        this.maxLoad = command.maxLoad();
-        this.driverId = command.driverId();
+        this.engine = command.engine();
+        this.fuel = command.fuel();
+        this.tires = command.tires();
+        this.electricalSystem = command.electricalSystem();
+        this.transmissionTemperature = command.transmissionTemperature();
+        this.driverName = command.driverName();
         this.vehicleImage = command.vehicleImage();
         this.color = command.color();
         this.lastTechnicalInspectionDate = command.lastTechnicalInspectionDate();
-        this.latitude = command.latitude();
-        this.longitude = command.longitude();
-        this.altitude = command.altitude();
-        this.speed = command.speed();
         this.createdAt = LocalDateTime.now();
-        this.GPSDateTime = LocalDateTime.now();
     }
 
     // Setters
-    public void setIdManager(int idManager) {this.idManager = idManager;}
-
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public void setModel(String model) {
         this.model = model;
     }
 
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
+    public void setEngine(int engine) {
+        this.engine = engine;
     }
 
-    public void setHumidity(int humidity) {
-        this.humidity = humidity;
+    public void setFuel(int fuel) {
+        this.fuel = fuel;
     }
 
-    public void setMaxLoad(int maxLoad) {this.maxLoad = maxLoad;}
+    public void setTires(int tires) {
+        this.tires = tires;
+    }
 
-    public void setDriverId(int driverId) {
-        this.driverId = driverId;
+    public void setElectricalSystem(int electricalSystem) {
+        this.electricalSystem = electricalSystem;
+    }
+
+    public void setTransmissionTemperature(int transmissionTemperature) {
+        this.transmissionTemperature = transmissionTemperature;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
     }
 
     public void setVehicleImage(String vehicleImage) {
@@ -109,26 +97,4 @@ public class Vehicle {
     public void setLastTechnicalInspectionDate(LocalDateTime lastTechnicalInspectionDate) {
         this.lastTechnicalInspectionDate = lastTechnicalInspectionDate;
     }
-
-    public void setLatitude(Double latitude) {
-        if (this.latitude == null || !this.latitude.equals(latitude)) {
-            this.latitude = latitude;
-            this.GPSDateTime = LocalDateTime.now();
-        }
-    }
-
-    public void setLongitude(Double longitude) {
-        if (this.longitude == null || !this.longitude.equals(longitude)) {
-            this.longitude = longitude;
-            this.GPSDateTime = LocalDateTime.now();
-        }
-    }
-
-    public void setAltitude(Double altitude) {
-        if (this.altitude == null || !this.altitude.equals(altitude)) {
-            this.altitude = altitude;
-            this.GPSDateTime = LocalDateTime.now(); // Update timestamp if altitude changes
-        }
-    }
-    public void setSpeed(Double speed) {this.speed = speed;}
 }

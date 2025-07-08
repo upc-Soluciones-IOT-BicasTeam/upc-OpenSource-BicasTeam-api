@@ -6,21 +6,17 @@ import com.bicasteam.movigestion.api.vehicles.interfaces.rest.resources.CreateVe
 public class CreateVehicleCommandFromResourceAssembler {
     public static CreateVehicleCommand toCommandFromResource(CreateVehicleResource resource) {
         return new CreateVehicleCommand(
-                resource.idManager(),
                 resource.licensePlate(),
-                resource.brand(),
                 resource.model(),
-                resource.temperature(),
-                resource.humidity(),
-                resource.maxLoad(),
-                resource.driverId(),
+                resource.engine(),
+                resource.fuel(),
+                resource.tires(),
+                resource.electricalSystem(),
+                resource.transmissionTemperature(),
+                resource.driverName(),
                 resource.vehicleImage(),
                 resource.color(),
-                resource.lastTechnicalInspectionDate(),
-                resource.latitude(),
-                resource.longitude(),
-                resource.altitude(),
-                resource.speed()
+                resource.lastTechnicalInspectionDate()
         );
     }
 }

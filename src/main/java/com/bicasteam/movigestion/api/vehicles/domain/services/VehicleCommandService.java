@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface VehicleCommandService {
     Optional<Vehicle> handle(CreateVehicleCommand command);
-    void deleteById(int id);
+    void deleteById(int id); // Nuevo método para eliminar un Vehicle
     void save(Vehicle vehicle);
 
 }
