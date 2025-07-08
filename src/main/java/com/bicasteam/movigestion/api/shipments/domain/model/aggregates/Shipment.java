@@ -1,97 +1,45 @@
 package com.bicasteam.movigestion.api.shipments.domain.model.aggregates;
 
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
+import com.bicasteam.movigestion.api.shipments.domain.model.commands.CreateShipmentCommand;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 
+@Getter
+@NoArgsConstructor
 @Entity
 public class Shipment {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Utilizar GenerationType.IDENTITY en lugar de GenerationType.SEQUENCE
-    private Long id;
-    private Long userId;
-    private String destination;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private int userId;
+    private String destiny;
     private String description;
-    private LocalDateTime dateTime;
+    private LocalDateTime createdAt;
+    private LocalDateTime dateTime; // Campo dateTime
     private String status;
+    private String driverName;  // Atributo nuevo
 
-    // Constructor vacío
-    public Shipment() {
-    }
+    // Agregar el campo idUserDestiny si falta
+    private Integer idUserDestiny;  // Este es el campo que puede estar causando el problema
 
-    // Constructor con todos los parámetros
-    public Shipment(Long id, Long userId, String destination, String description, LocalDateTime dateTime, String status) {
-        this.id = id;
-        this.userId = userId;
-        this.destination = destination;
-        this.description = description;
-        this.dateTime = dateTime;
-        this.status = status;
-    }
-
-    public Shipment(Long userId, String destination, String description, LocalDateTime dateTime, String status) {
-    }
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public Shipment(CreateShipmentCommand command) {
+        this.userId = 0; // Asignar valor por defecto o lógica de asignación.
+        this.destiny = command.destiny();
+        this.description = command.description();
+        this.createdAt = LocalDateTime.now();
+        this.dateTime = LocalDateTime.now(); // Asignar valor a dateTime
+        this.status = command.status();
+        this.driverName = command.driverName();
+        this.idUserDestiny = command.idUserDestiny(); // Asegurarse de asignar este valor
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    // Método para establecer la fecha y hora a partir de cadenas
-    public void setDateTime(String date, String time) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalDate localDate = LocalDate.parse(date, dateFormatter);
-        LocalTime localTime = LocalTime.parse(time, timeFormatter);
-        this.dateTime = LocalDateTime.of(localDate, localTime);
-    }
 }
