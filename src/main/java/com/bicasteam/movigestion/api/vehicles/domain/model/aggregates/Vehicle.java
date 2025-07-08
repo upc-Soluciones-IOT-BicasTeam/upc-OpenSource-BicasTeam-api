@@ -30,6 +30,8 @@ public class Vehicle {
     @Column(nullable = false)
     private String model;
 
+
+
     private int temperature;
     private int humidity;
     private int maxLoad;
