@@ -1,6 +1,7 @@
 package com.bicasteam.movigestion.api.vehicles.domain.model.aggregates;
 
 import com.bicasteam.movigestion.api.vehicles.domain.model.commands.CreateVehicleCommand;
+import com.bicasteam.movigestion.api.vehicles.domain.model.valueObjects.VehicleLocation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,15 +40,11 @@ public class Vehicle {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastTechnicalInspectionDate;
 
-    private Double latitude;
-    private Double longitude;
-    private Double altitude;
-    private Double speed;
+    @Embedded
+    private VehicleLocation location;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
-
-    private LocalDateTime GPSDateTime;
 
     public Vehicle(CreateVehicleCommand command) {
         this.idManager = command.idManager();
@@ -61,12 +58,21 @@ public class Vehicle {
         this.vehicleImage = command.vehicleImage();
         this.color = command.color();
         this.lastTechnicalInspectionDate = command.lastTechnicalInspectionDate();
-        this.latitude = command.latitude();
-        this.longitude = command.longitude();
-        this.altitude = command.altitude();
-        this.speed = command.speed();
+        this.location = new VehicleLocation(
+                command.latitude(),
+                command.longitude(),
+                command.altitude(),
+                command.speed()
+        );
         this.createdAt = LocalDateTime.now();
-        this.GPSDateTime = LocalDateTime.now();
+    }
+
+    public void updateLocation(Double latitude, Double longitude, Double altitude, Double speed) {
+        if (this.location == null) {
+            this.location = new VehicleLocation(latitude, longitude, altitude, speed);
+        } else {
+            this.location.updateLocation(latitude, longitude, altitude, speed);
+        }
     }
 
     // Setters
@@ -109,26 +115,4 @@ public class Vehicle {
     public void setLastTechnicalInspectionDate(LocalDateTime lastTechnicalInspectionDate) {
         this.lastTechnicalInspectionDate = lastTechnicalInspectionDate;
     }
-
-    public void setLatitude(Double latitude) {
-        if (this.latitude == null || !this.latitude.equals(latitude)) {
-            this.latitude = latitude;
-            this.GPSDateTime = LocalDateTime.now();
-        }
-    }
-
-    public void setLongitude(Double longitude) {
-        if (this.longitude == null || !this.longitude.equals(longitude)) {
-            this.longitude = longitude;
-            this.GPSDateTime = LocalDateTime.now();
-        }
-    }
-
-    public void setAltitude(Double altitude) {
-        if (this.altitude == null || !this.altitude.equals(altitude)) {
-            this.altitude = altitude;
-            this.GPSDateTime = LocalDateTime.now(); // Update timestamp if altitude changes
-        }
-    }
-    public void setSpeed(Double speed) {this.speed = speed;}
 }

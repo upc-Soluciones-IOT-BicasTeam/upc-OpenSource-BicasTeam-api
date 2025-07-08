@@ -79,10 +79,13 @@ public class VehicleController {
         updatedVehicle.setVehicleImage(resource.vehicleImage());
         updatedVehicle.setColor(resource.color());
         updatedVehicle.setLastTechnicalInspectionDate(resource.lastTechnicalInspectionDate());
-        updatedVehicle.setLatitude(resource.latitude());
-        updatedVehicle.setLongitude(resource.longitude());
-        updatedVehicle.setAltitude(resource.altitude());
-        updatedVehicle.setSpeed(resource.speed());
+
+        updatedVehicle.updateLocation(
+                resource.latitude(),
+                resource.longitude(),
+                resource.altitude(),
+                resource.speed()
+        );
 
         vehicleCommandService.save(updatedVehicle);
 
