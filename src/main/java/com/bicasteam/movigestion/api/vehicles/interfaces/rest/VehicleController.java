@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/vehicles")
+@RequestMapping("/api/vehicles")
 public class VehicleController {
 
     private final VehicleCommandService vehicleCommandService;
@@ -79,13 +79,10 @@ public class VehicleController {
         updatedVehicle.setVehicleImage(resource.vehicleImage());
         updatedVehicle.setColor(resource.color());
         updatedVehicle.setLastTechnicalInspectionDate(resource.lastTechnicalInspectionDate());
-
-        updatedVehicle.updateLocation(
-                resource.latitude(),
-                resource.longitude(),
-                resource.altitude(),
-                resource.speed()
-        );
+        updatedVehicle.setLatitude(resource.latitude());
+        updatedVehicle.setLongitude(resource.longitude());
+        updatedVehicle.setAltitude(resource.altitude());
+        updatedVehicle.setSpeed(resource.speed());
 
         vehicleCommandService.save(updatedVehicle);
 
